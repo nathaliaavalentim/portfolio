@@ -23,6 +23,9 @@ A project focused on sending emails using Django, with the entire setup containe
 ## Social Network with GraphQL, Node.js, and React
 A social networking application built with GraphQL, Node.js, and React. This project demonstrates my capability to create complex, interactive web applications with modern web technologies and API architectures.
 
+## AppExpenses Flutter
+AppExpenses Flutter is a personal expense tracking app developed using Flutter, designed to help users manage their finances in a simple and intuitive way. It offers features such as adding expenses, viewing expense charts, and categorizing expenditures. The goal is to assist users in tracking their financial habits and making more informed financial decisions.
+
 ---
 
 Each project in this portfolio reflects my dedication to learning and applying a wide range of technologies to solve real-world problems. Feel free to explore the code and see how I approach different challenges in software development.
