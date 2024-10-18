@@ -1,0 +1,14 @@
+# Ignorar node_modules em qualquer nível
+node_modules/
+
+# Ignorar .next em qualquer nível
+.next/
+
+# Ignorar logs e arquivos de lock do Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar arquivos temporários do sistema
+.DS_Store
+Thumbs.db
