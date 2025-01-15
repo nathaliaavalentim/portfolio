@@ -26,6 +26,9 @@ A social networking application built with GraphQL, Node.js, and React. This pro
 ## AppExpenses Flutter
 AppExpenses Flutter is a personal expense tracking app developed using Flutter, designed to help users manage their finances in a simple and intuitive way. It offers features such as adding expenses, viewing expense charts, and categorizing expenditures. The goal is to assist users in tracking their financial habits and making more informed financial decisions.
 
+## Favorite Products
+Favorite Products is a Web Application to build a list with favorite products of the clients.
+
 ---
 
 Each project in this portfolio reflects my dedication to learning and applying a wide range of technologies to solve real-world problems. Feel free to explore the code and see how I approach different challenges in software development.
