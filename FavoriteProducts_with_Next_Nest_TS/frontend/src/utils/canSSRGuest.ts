@@ -11,7 +11,7 @@ export function canSSRGuest<P>(fn: GetServerSideProps<P>){
         if(cookies['@atendimento.token']){
             return{
                 redirect:{
-                    destination: '/tutorials',
+                    destination: '/products',
                     permanent: false,
                 }
             }

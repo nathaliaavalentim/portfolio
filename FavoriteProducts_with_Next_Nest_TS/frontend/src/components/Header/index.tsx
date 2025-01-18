@@ -1,8 +1,10 @@
 import  Link  from 'next/link'
 import styles from './styles.module.scss'
-import {FiLogOut} from 'react-icons/fi'
+import {FiLogOut, FiStar} from 'react-icons/fi'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
+import React from 'react';
+import router from 'next/router'
 
 export function Header(){
 
@@ -11,14 +13,20 @@ export function Header(){
     return(
         <header className={styles.headerConteiner}>
             <div className={styles.menuNav}>
-                <Link href='/tutorials'>
-                    <h2>Início</h2>
+                <Link href='/products'>
+                    
                 </Link>
 
                 <nav className={styles.menuNav}>
+
+                <button onClick={() => router.push('/favorites')}>
+                <h1>Meus Favoritos</h1><FiStar color='#fff' size={24}/>
+          </button>
                     <button onClick={signOut}>
                         <h1>Sair</h1><FiLogOut color='#fff' size={24}/>
                     </button>
+
+
                 </nav>
 
             </div>

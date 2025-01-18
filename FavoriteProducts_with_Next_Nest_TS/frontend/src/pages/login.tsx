@@ -1,3 +1,4 @@
+import React from 'react'; 
 import { useContext, FormEvent, useState} from 'react'
 import {toast} from 'react-toastify';
 import Head from 'next/head'
