@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { Header } from '../../components/Header';
 import styles from './styles.module.scss';
 import { Button } from '@mui/material';
 import { ProductProps } from '../products';
 import { toast } from 'react-toastify';
 import { favoritesService } from '../../services/favorite/favoritesService';
 import { AuthContext } from '../../contexts/AuthContext';
+import Head from 'next/head';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Favorites = ({ products }: { products: ProductProps[] }) => {
   const { user } = useContext(AuthContext);  // Acessando o user do AuthContext
@@ -74,53 +77,61 @@ const Favorites = ({ products }: { products: ProductProps[] }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Produtos Favoritos</h1>
-      <div className={styles.actionsContainer}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => router.push('/products')}
-          className={styles.backButton}
-        >
-          Voltar para Produtos
-        </Button>
-        {favorites.length > 0 && (
-          <Button
-            variant="contained"
-            onClick={clearFavorites}
-            className={styles.clearButton}
-          >
-            Limpar Favoritos
-          </Button>
+    <>
+      <Head>
+        <title>Produtos Favoritos</title>
+        <meta name="description" content="Gerencie seus produtos favoritos nesta página." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <Header />
+      <div className={styles.container}>
+        <h1>Produtos Favoritos</h1>
+        <div className={styles.actionsContainer}>
+        
+
+        </div>
+        {favorites.length === 0 ? (
+          <p className={styles.emptyMessage}>Você não tem produtos favoritos.</p>
+        ) : (
+          <section className={styles.favoritesList}>
+            {favorites.map((product) => (
+              <div key={product.id} className={styles.favoriteItem}>
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  width={200}
+                  height={200}
+                  className={styles.productImage}
+                />
+                <h3>{product.title}</h3>
+                <Button
+                  variant="outlined"
+                  onClick={() => removeFavorite(product.id)}
+                  className={styles.removeButton}
+                >
+                  Remover
+                </Button>
+              </div>
+            ))}
+          </section>
         )}
+        {favorites.length > 0 && (
+  <div className={styles.clearFavoritesContainer}>
+    <Button
+      variant="contained"
+      onClick={clearFavorites}
+      className={styles.clearButton}
+      startIcon={<DeleteIcon />} 
+    >
+      Limpar Favoritos
+    </Button>
+  </div>
+)}
+
+
       </div>
-      {favorites.length === 0 ? (
-        <p className={styles.emptyMessage}>Você não tem produtos favoritos.</p>
-      ) : (
-        <section className={styles.favoritesList}>
-          {favorites.map((product) => (
-            <div key={product.id} className={styles.favoriteItem}>
-              <Image
-                src={product.image}
-                alt={product.title}
-                width={200}
-                height={200}
-                className={styles.productImage}
-              />
-              <h3>{product.title}</h3>
-              <Button
-                variant="outlined"
-                onClick={() => removeFavorite(product.id)}
-                className={styles.removeButton}
-              >
-                Remover
-              </Button>
-            </div>
-          ))}
-        </section>
-      )}
-    </div>
+      
+    </>
   );
 };
 

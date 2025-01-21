@@ -62,3 +62,34 @@
     align-self: stretch;
     text-align: center;
 }
+
+.clearFavoritesContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px; 
+}
+
+.clearButton {
+    background-color: #e74c3c;
+    color: white;
+    text-transform: none;
+    padding: 22px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.clearButton:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.clearButton i {
+    font-size: 1.2rem;
+}

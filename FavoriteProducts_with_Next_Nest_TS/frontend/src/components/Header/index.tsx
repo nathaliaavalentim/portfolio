@@ -1,35 +1,38 @@
-import  Link  from 'next/link'
-import styles from './styles.module.scss'
-import {FiLogOut, FiStar} from 'react-icons/fi'
-import { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
+import Link from 'next/link';
+import styles from './styles.module.scss';
+import { FiLogOut, FiStar, FiShoppingCart } from 'react-icons/fi';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 import React from 'react';
-import router from 'next/router'
+import router from 'next/router';
 
-export function Header(){
+export function Header() {
+  const { signOut } = useContext(AuthContext);
 
-    const {signOut} = useContext(AuthContext);
+  return (
+    <header className={styles.headerContainer}>
+      <div className={styles.logoContainer}>
+        <Link href="/products" className={styles.logo}>
+          <span className={styles.logoText}>MyStore</span>
+        </Link>
+      </div>
 
-    return(
-        <header className={styles.headerConteiner}>
-            <div className={styles.menuNav}>
-                <Link href='/products'>
-                    
-                </Link>
+      <nav className={styles.navigation}>
+        <Link href="/products" className={styles.navLink}>
+          <FiShoppingCart size={24} />
+          <span>Lista de Produtos</span>
+        </Link>
 
-                <nav className={styles.menuNav}>
+        <button onClick={() => router.push('/favorites')} className={styles.navButton}>
+          <FiStar size={24} />
+          <span>Meus Favoritos</span>
+        </button>
 
-                <button onClick={() => router.push('/favorites')}>
-                <h1>Meus Favoritos</h1><FiStar color='#fff' size={24}/>
-          </button>
-                    <button onClick={signOut}>
-                        <h1>Sair</h1><FiLogOut color='#fff' size={24}/>
-                    </button>
-
-
-                </nav>
-
-            </div>
-        </header>
-    )
+        <button onClick={signOut} className={styles.navButton}>
+          <FiLogOut size={24} />
+          <span>Sair</span>
+        </button>
+      </nav>
+    </header>
+  );
 }
