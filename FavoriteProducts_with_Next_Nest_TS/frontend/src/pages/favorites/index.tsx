@@ -1,160 +1,138 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styles from './styles.module.scss';
 import { Button } from '@mui/material';
 import { ProductProps } from '../products';
-import { api } from '../../services/apiClient';
 import { toast } from 'react-toastify';
+import { favoritesService } from '../../services/favorite/favoritesService';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Favorites = ({ products }: { products: ProductProps[] }) => {
-    const [productList, setProductList] = useState(products || []);
-    const [favorites, setFavorites] = useState<ProductProps[]>([]);
-    const [favoritesData, setFavoritesData] = useState([]);
-    const [error, setError] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string | null>(null);
-    const router = useRouter();
+  const { user } = useContext(AuthContext);  // Acessando o user do AuthContext
+  const [productList, setProductList] = useState(products || []);
+  const [favorites, setFavorites] = useState<ProductProps[]>([]);
+  const router = useRouter();
 
-    useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
-        if (storedUserId) {
-            setUserId(storedUserId);
-            fetchFavorites(storedUserId);
-        }
-    }, []);
+  useEffect(() => {
+    if (user?.id) {
+      fetchFavorites();
+    }
+  }, [user]);  // Dependência no user
 
-    const fetchFavorites = async (userId: string) => {
-        try {
+  const fetchFavorites = async () => {
+    try {
+      const favoritesData = await favoritesService.getFavorites();
+      const filteredProducts = productList.filter((product) =>
+        favoritesData.some((favorite) => favorite.productId === product.id)
+      );
+      setFavorites(filteredProducts);
+    } catch (error: any) {
+      console.error('Erro ao carregar favoritos:', error.message);
+      toast.error(error.message);
+    }
+  };
 
+  const removeFavorite = async (productId: number) => {
+    try {
+      if (!user?.id) {
+        toast.error('Usuário não autenticado.');
+        return;
+      }
 
+      const favoriteData = await favoritesService.getFavorites();
+      const favoriteToRemove = favoriteData.find((fav) => fav.productId === productId);
 
-            const response = await api.get(`favorites/${userId}`);
+      if (!favoriteToRemove) {
+        toast.error('Favorito não encontrado.');
+        return;
+      }
 
-            const data = response.data;
+      await favoritesService.removeFavorite(favoriteToRemove.id);
+      toast.success('Produto removido dos favoritos.');
+      fetchFavorites();
+    } catch (error: any) {
+      console.error('Erro ao remover favorito:', error.message);
+      toast.error(error.message || 'Erro ao remover favorito.');
+    }
+  };
 
-            setFavoritesData(data);
+  const clearFavorites = async () => {
+    try {
+      if (!user?.id) {
+        toast.error('Usuário não autenticado.');
+        return;
+      }
 
-            const filterProducts = productList.filter(productL =>
-                data.some(product => product.productId === productL.id)
-            );
+      await favoritesService.clearFavorites();
+      toast.success('Todos os favoritos foram removidos.');
+      fetchFavorites();
+    } catch (error: any) {
+      console.error('Erro ao limpar favoritos:', error.message);
+      toast.error(error.message);
+    }
+  };
 
-            setFavorites(filterProducts);
-
-        } catch (error) {
-            console.error("Erro ao carregar favoritos:", error);
-        }
-    };
-
-
-
-
-
-
-    const saveFavorites = (updatedFavorites: ProductProps[]) => {
-        setFavorites(updatedFavorites);
-        const storedUserId = localStorage.getItem('userId');
-        if (storedUserId) {
-            localStorage.setItem(`favorites_${storedUserId}`, JSON.stringify(updatedFavorites));
-        }
-    };
-
-    const removeFavorite = async (id: number) => {
-
-        try {
-
-            const filterFavorite = favoritesData.filter(favorite =>
-                favorites.some(product => favorite.productId === id)
-            );
-
-
-            const response = await api.delete(`favorites/${userId}/${filterFavorite[0].id}`);
-
-            toast.success("Removido o produto dos favoritos.")
-
-            fetchFavorites(userId);
-        } catch (error) {
-            console.error("Erro ao remover produto favorito", error.message || error);
-        }
-
-    };
-
-    const clearFavorites = async () => {
-
-        try {
-
-
-            const response = await api.delete(`favorites/${userId}`);
-
-            toast.success("Removido todos os favoritos.")
-
-            fetchFavorites(userId);
-        } catch (error) {
-            console.error("Erro ao remover favoritos", error.message || error);
-        }
-
-    };
-
-    return (
-        <div className={styles.container}>
-            <h1>Produtos Favoritos</h1>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => router.push('/products')}
-                className={styles.backButton}
-            >
-                Voltar para Produtos
-            </Button>
-            {error && <p className={styles.error}>{error}</p>}
-            <section className={styles.favoritesList}>
-                {favorites.length === 0 ? (
-                    <p className={styles.emptyMessage}>Você não tem produtos favoritos.</p>
-                ) : (
-                    favorites.map((product) => (
-                        <div key={product.id} className={styles.favoriteItem}>
-                            <Image
-                                src={product.image}
-                                alt={product.title}
-                                width={200}
-                                height={200}
-                                className={styles.productImage}
-                            />
-                            <h3>{product.title}</h3>
-                            <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={() => removeFavorite(product.id)}
-                                className={styles.removeButton}
-                            >
-                                Remover
-                            </Button>
-                        </div>
-                    ))
-                )}
-            </section>
-            {favorites.length > 0 && (
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={clearFavorites}
-                    className={styles.clearButton}
-                >
-                    Limpar Favoritos
-                </Button>
-            )}
-        </div>
-    );
+  return (
+    <div className={styles.container}>
+      <h1>Produtos Favoritos</h1>
+      <div className={styles.actionsContainer}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => router.push('/products')}
+          className={styles.backButton}
+        >
+          Voltar para Produtos
+        </Button>
+        {favorites.length > 0 && (
+          <Button
+            variant="contained"
+            onClick={clearFavorites}
+            className={styles.clearButton}
+          >
+            Limpar Favoritos
+          </Button>
+        )}
+      </div>
+      {favorites.length === 0 ? (
+        <p className={styles.emptyMessage}>Você não tem produtos favoritos.</p>
+      ) : (
+        <section className={styles.favoritesList}>
+          {favorites.map((product) => (
+            <div key={product.id} className={styles.favoriteItem}>
+              <Image
+                src={product.image}
+                alt={product.title}
+                width={200}
+                height={200}
+                className={styles.productImage}
+              />
+              <h3>{product.title}</h3>
+              <Button
+                variant="outlined"
+                onClick={() => removeFavorite(product.id)}
+                className={styles.removeButton}
+              >
+                Remover
+              </Button>
+            </div>
+          ))}
+        </section>
+      )}
+    </div>
+  );
 };
 
 export default Favorites;
 
 export const getServerSideProps = async () => {
-    const response = await fetch("https://fakestoreapi.com/products");
-    const data = await response.json();
+  const response = await fetch('https://fakestoreapi.com/products');
+  const data = await response.json();
 
-    return {
-        props: {
-            products: data,
-        }
-    };
+  return {
+    props: {
+      products: data,
+    },
+  };
 };

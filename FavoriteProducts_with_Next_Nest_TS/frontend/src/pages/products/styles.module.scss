@@ -11,178 +11,94 @@ $azul-turquesa: #40E0D0;
 $azul-petróleo: #1B6F87;
 $azul-celeste: #56A0D3; 
 
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: var($azul-primario); 
-}
-
-
 .filterButton,
-.clearButton {
-  background-color: var($azul-escuro); 
+.clearButton,
+.favoriteButton,
+.viewListButton {
+  background-color: var($azul-celeste);
   color: white;
   border: none;
   padding: 12px 20px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 .filterButton:hover,
-.clearButton:hover {
-  background-color: var($azul-secundario); 
+.clearButton:hover,
+.favoriteButton:hover,
+.viewListButton:hover {
+  background-color: var($azul-turquesa);
 }
 
-
-.containerHeader {
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var($azul-cinza); 
-  padding: 10px;
-}
-
-
-.searchWrapper {
-  display: flex;
-  align-items: center;
-  gap: 20px; 
-}
-
-.searchInput {
-  padding: 8px;
-  font-size: 16px;
-  width: 250px;
-  border: 1px solid var($azul-claro); 
-  border-radius: 4px;
-  margin-top: 20px;
-  background-color: var($azul-neve); 
-}
-
-.listOrders {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px; 
+.filterButton:disabled,
+.clearButton:disabled,
+.favoriteButton:disabled,
+.viewListButton:disabled {
+  background-color: var($azul-claro-hover);
+  cursor: not-allowed;
 }
 
 .card {
-  background-color: #81bfe9; 
+  height: auto;
+  background-color: #e8edf0;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 16px;
   text-align: center;
   display: flex;
-  flex-direction: column; 
-  justify-content: space-between; 
-  height: 100%; 
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px); 
+  transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .productImage {
   width: 100%;
   height: auto;
+  max-height: 150px;
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 10px;
-  object-fit: contain; 
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.favoriteButtonContainer {
-  margin-top: 20px; 
-  display: flex;
-  justify-content: center; 
-}
-
-.favoriteButton {
-  background-color: #003f79; 
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-  width: 100%; 
-  max-width: 200px; 
-}
-
-.favoriteButton:hover {
-  background-color: #003e4d; 
-}
-
-.favoriteButton:disabled {
-  background-color: var($azul-claro-hover); 
-  cursor: not-allowed;
-}
-
-
-.closeButton {
-  background: none;
-  border: none;
-  color: red; 
-  cursor: pointer;
-  font-size: 24px;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.closeButton:hover {
-  color: #ff0000; 
-}
-
-/* Modal */
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 600px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+.cardContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
+  gap: 10px;
+  width: 100%;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.cardActions {
+  margin-top: 10px;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.listOrders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px; 
+  justify-items: center; 
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .maxFavoritesModal {
-  background: var(--azul-neve); 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var($azul-neve);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
@@ -192,64 +108,10 @@ $azul-celeste: #56A0D3;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.filterDrawerContent {
-  padding: 20px;
+.maxFavoritesModal h2 {
+  margin-bottom: 16px;
 }
 
-.formControl {
-  margin-bottom: 20px;
-}
-
-.priceInput {
-  margin-top: 10px;
-}
-
-
-@media (max-width: 1200px) {
-  .listOrders {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .listOrders {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .listOrders {
-    grid-template-columns: 1fr;
-  }
-
-  .modal {
-    width: 95%;
-    padding: 15px;
-  }
-}
-
-
-.viewListButton {
-  background-color: var($azul-primario); 
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-  margin-top: 40px; 
-  margin-bottom: 40px; 
-  width: 100%; 
-  max-width: 220px; 
-  text-align: center;
-}
-
-.viewListButton:hover {
-  background-color: var($azul-secundario); 
-}
-
-.viewListButton:disabled {
-  background-color: var($azul-claro-hover); 
-  cursor: not-allowed;
+.maxFavoritesModal p {
+  margin-bottom: 24px;
 }

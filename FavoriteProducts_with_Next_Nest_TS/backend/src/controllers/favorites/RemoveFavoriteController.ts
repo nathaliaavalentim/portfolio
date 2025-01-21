@@ -4,8 +4,7 @@ import { RemoveFavoriteService } from "../../services/favorites/RemoveFavoriteSe
 class RemoveFavoriteController {
   async handle(req: Request, res: Response) {
     const { favoriteId } = req.params;
-    const { userId } = req.params;
-
+    const userId = String(req.user_id);
     const removeFavoriteService = new RemoveFavoriteService();
 
     try {

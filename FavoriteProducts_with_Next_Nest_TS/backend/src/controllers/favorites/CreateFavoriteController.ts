@@ -3,7 +3,9 @@ import { CreateFavoriteService } from '../../services/favorites/CreateFavoriteSe
 
 class CreateFavoriteController {
   async handle(req: Request, res: Response) {
-    const { userId, productId } = req.body;    
+    const { productId } = req.body;    
+    const userId = String(req.user_id);
+
 
     const createFavoriteService = new CreateFavoriteService();
     

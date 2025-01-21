@@ -3,7 +3,7 @@ import { ListFavoritesService } from "../../services/favorites/ListFavoritesServ
 
 class ListFavoritesController {
   async handle(req: Request, res: Response) {
-    const { userId } = req.params;
+    const userId = String(req.user_id);
 
     const listFavoritesService = new ListFavoritesService();
 

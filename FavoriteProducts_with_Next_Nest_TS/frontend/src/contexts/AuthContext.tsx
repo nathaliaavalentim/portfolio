@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
-import React from 'react'; 
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
 import { api } from '../services/apiClient';
+import React from 'react';
 
 type AuthContextData = {
   user: UserProps | null;
@@ -46,7 +46,7 @@ export function signOut() {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<UserProps>();
+  const [user, setUser] = useState<UserProps | null>(null);  // Inicializando com null
   const isAuthenticated = !!user;
 
   useEffect(() => {
@@ -56,12 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api.get('/me')
         .then(response => {
           const { id, name, email } = response.data;
-
-          setUser({
-            id,
-            name,
-            email
-          });
+          setUser({ id, name, email });
         })
         .catch(() => {
           signOut();
@@ -71,28 +66,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInProps) {
     try {
-      const response = await api.post('/login', {
-        email,
-        password
-      });
-
+      const response = await api.post('/login', { email, password });
       const { id, name, token } = response.data;
 
-      localStorage.setItem('userId', id);
+      setUser({ id, name, email });
 
       setCookie(undefined, '@atendimento.token', token, {
-        maxAge: 60 * 60 * 24 * 30, //Expira em 1 mês
+        maxAge: 60 * 60 * 24 * 30, // Expira em 1 mês
         path: '/' 
       });
 
-      setUser({
-        id,
-        name,
-        email
-      });
-
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
       toast.success("Logado com sucesso.");
 
       Router.push('/products');
@@ -104,12 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signUp({ name, email, password }: SignUpProps) {
     try {
-      const response = await api.post('/signup', {
-        name,
-        email,
-        password
-      });
-
+      const response = await api.post('/signup', { name, email, password });
       toast.success("Cadastro realizado com sucesso.");
       Router.push('/login');
     } catch (err: any) {

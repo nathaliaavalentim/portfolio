@@ -1,13 +1,12 @@
 import prismaClient from "../../prisma";
 
 interface FavoriteRequest {
-  userId: string;    // ID do usuário
-  productId: number; // ID do produto
+  userId: string;   
+  productId: number; 
 }
 
 class CreateFavoriteService {
   async execute({ userId, productId }: FavoriteRequest) {
-    // Verifica se o produto já está nos favoritos do usuário
     const existingFavorite = await prismaClient.favorite.findFirst({
       where: { userId, productId },
     });
@@ -16,7 +15,15 @@ class CreateFavoriteService {
       throw new Error("O produto já está nos favoritos.");
     }
 
-    // Cria o favorito no banco de dados com userId e productId
+    //Verifica se o usuário ja tem 5 favoritos
+    const favoriteCount = await prismaClient.favorite.count({
+      where: { userId },
+    });
+    if (favoriteCount >= 5) {
+      throw new Error("Você atingiu o limite de 5 favoritos.");
+    }
+
+    //Cria o favorito no banco de dados com userId e productId
     try {
       const favorite = await prismaClient.favorite.create({
         data: {

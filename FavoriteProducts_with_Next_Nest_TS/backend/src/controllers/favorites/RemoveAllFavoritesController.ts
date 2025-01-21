@@ -3,10 +3,11 @@ import { RemoveAllFavoritesService } from "../../services/favorites/RemoveAllFav
 
 class RemoveAllFavoritesController {
   async handle(req: Request, res: Response) {
-    const { userId } = req.params;
-
+    const userId = String(req.user_id);
     const removeAllFavoritesService = new RemoveAllFavoritesService();
     const result = await removeAllFavoritesService.execute(userId);
+
+    
 
     return res.json({ message: "Todos os favoritos removidos com sucesso", result });
   }

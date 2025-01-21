@@ -23,9 +23,9 @@ router.post('/login', new AuthUserController().handle) //login de usuário
 router.get('/me', isAuthenticated, new DetailUserController().handle) //detalhes do usuário para controle de acesso
 
 //Rotas de Favorito
-router.post('/favorites', new CreateFavoriteController().handle);//cria favorito
-router.get('/favorites/:userId', new ListFavoritesController().handle);//obtem favoritos
-router.delete("/favorites/:userId/:favoriteId", new RemoveFavoriteController().handle); //remove favorito
-router.delete("/favorites/:userId", new RemoveAllFavoritesController().handle);//remove todos os favoritos
+router.post('/favorites', isAuthenticated, new CreateFavoriteController().handle);//cria favorito
+router.get('/favorites', isAuthenticated, new ListFavoritesController().handle);//obtem favoritos
+router.delete("/favorites/:favoriteId", isAuthenticated, new RemoveFavoriteController().handle); //remove favorito
+router.delete("/favorites", isAuthenticated, new RemoveAllFavoritesController().handle);//remove todos os favoritos
 
 export { router };
