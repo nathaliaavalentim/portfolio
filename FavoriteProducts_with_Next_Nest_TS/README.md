@@ -12,7 +12,7 @@ No env, fazer as configurações de acordo com o seu banco
 
 Fazer as configurações do Prisma Client
 
-Criar JWT secret no env (https://www.md5hashgenerator.com/)
+Criar JWT secret no env (https://www.md5hashgenerator.com/), colocando e gerando uma chave MD5, criando JWT_SECRET=coloque-a-chave-gerada no env.
 
 Migrations: yarn prisma migrate dev
 
